@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="content">
     <h1 class="todo__head">To-do App</h1>
-    {{ setItem }}
+    <!--{{ setItem }}-->
     <div class="todo__input-area">
       <input type="text" class="todo__input" autofocus v-model="inputValue" v-on:keyup.enter="addItem" placeholder="add new task">
     </div>
@@ -36,28 +36,29 @@
     created: function() {
       this.items = localStorage.getItem(this.storageM) ? JSON.parse(localStorage.getItem(this.storageM)) : [];
     },
-    computed: {
-      setItem: function() {
-        localStorage.setItem(this.storageM, JSON.stringify(this.items));
-      },
-    },
-    watch: {
-//      items: function() {
+//    computed: {
+//      setItem: function() {
 //        localStorage.setItem(this.storageM, JSON.stringify(this.items));
-//      }
+//      },
+//    },
+    watch: {
+      items: {
+        handler: function (val) {
+          localStorage.setItem(this.storageM, JSON.stringify(this.items));
+        },
+        deep: true
+      }
     },
     methods: {
       addItem : function() {
         if (this.inputValue) {
           this.items.push({'todo': this.inputValue, 'completed': false});
-          localStorage.setItem(this.storageM , JSON.stringify(this.items));
           this.inputValue = '';
         }
       },
       removeItem : function(i) {
         var index = i.replace('item','')
         this.items.splice(index,1);
-        localStorage.setItem(this.storageM , JSON.stringify(this.items));
       }
     }
   }
